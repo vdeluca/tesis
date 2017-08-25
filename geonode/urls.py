@@ -33,6 +33,10 @@ from geonode.api.views import verify_token, roles, users, admin_role
 
 import autocomplete_light
 
+#vdeluca
+from .views import home_new
+
+
 # Setup Django Admin
 autocomplete_light.autodiscover()
 
@@ -51,7 +55,8 @@ sitemaps = {
 urlpatterns = patterns('',
 
                        # Static pages
-                       url(r'^/?$', TemplateView.as_view(template_name='index.html'), name='home'),
+#                       url(r'^/?$', TemplateView.as_view(template_name='index.html'), name='home'),
+                       url(r'^/?$', home_new, name='home'),
                        url(r'^help/$', TemplateView.as_view(template_name='help.html'), name='help'),
                        url(r'^developer/$', TemplateView.as_view(template_name='developer.html'), name='developer'),
                        url(r'^about/$', TemplateView.as_view(template_name='about.html'), name='about'),

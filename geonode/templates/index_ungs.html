@@ -1,0 +1,51 @@
+{% extends "site_base.html" %}
+{% load i18n %}
+{% load staticfiles %}
+{% load base_tags %}
+
+{% block title %} {% trans "Welcome!" %} - {{ block.super }} {% endblock %}
+
+{% block body_class %}home{% endblock %}
+
+{% block middle %}
+  {% block hero %}
+  {% endblock %}
+
+  {% block mainbody %}
+
+  {% block datasets %}
+	{% include 'maps/map_geoexplorer.js' %}
+  {% endblock %}
+
+  {% block showcase %}
+  {% endblock %}
+
+  {% endblock %}
+
+{% endblock %}
+
+{% block extra_script %}
+{{ block.super }}
+{% if DEBUG_STATIC %}
+<script src="{{ STATIC_URL }}lib/js/angular.js"></script>
+{% endif %}
+<script type="text/javascript">
+    FEATURED_URL = '{% url 'api_dispatch_list' api_name='api' resource_name='featured' %}'
+    'use strict';
+    (function(){
+      var module = angular.module('featured', []);
+      module.run(function($http, $rootScope){
+        $http.get(FEATURED_URL).success(function(data){
+          $rootScope.featured = data.objects;
+        });
+      });
+    })();
+</script>
+<script>
+	$('[data-toggle="tooltip"]').tooltip();
+</script>
+{% endblock extra_script %}
+
+{% block footer %}
+
+{% endblock %}

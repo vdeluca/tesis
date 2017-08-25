@@ -34,6 +34,13 @@ from geonode import get_version
 from geonode.base.templatetags.base_tags import facets
 from geonode.groups.models import GroupProfile
 
+#vdeluca
+from maps.views import *
+from geonode.layers.views import _resolve_layer
+from geonode.maps.views import _resolve_map
+from django.shortcuts import render, get_object_or_404, render_to_response, redirect
+_PERMISSION_MSG_VIEW = "You are not allowed to view this map."
+
 
 class AjaxLoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -146,3 +153,13 @@ def h_keywords(request):
     from geonode.base.models import HierarchicalKeyword as hk
     keywords = json.dumps(hk.dump_bulk_tree())
     return HttpResponse(content=keywords)
+
+#vdeluca
+#rewrite func to get home map
+def home_new(request):
+	map_obj = _resolve_map(request, "11", 'base.view_resourcebase')
+	access_token = None
+	config = map_obj.viewer_json(request.user, access_token)
+	context = {'config': json.dumps(config),'map': map_obj,'preview': getattr(settings,'LAYER_PREVIEW_LIBRARY','')}
+	return render(request,"index_ungs.html",context)
+	
